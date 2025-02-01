@@ -1,0 +1,24 @@
+.image {
+    max-width: auto;
+    max-height: 100vh;  
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    display: block;  
+    margin: 0 auto; 
+}
+
+
+.indicadores{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+
+.input{
+    padding: auto;
+    
+}
