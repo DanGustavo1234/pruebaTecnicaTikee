@@ -6,6 +6,7 @@ import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 import Login from './routes/Login'
 import Singup from './routes/Singup'
 import Dashboard from './routes/Dashboard'
+import Otp from './routes/Otp'
 import ProtectedRoute from './routes/ProtectedRoute'
 import AuthProvider from './auth/AuthProvider'
 
@@ -17,8 +18,12 @@ const router=createBrowserRouter([
     element:<Login/>
   },
   {
-    path: '/signup',
+    path: '/singup',
     element:<Singup/>
+  },
+  {
+    path: '/otp',
+    element:<Otp/>
   },
   {
     path: '/',
