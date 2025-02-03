@@ -30,13 +30,20 @@ React Router para manejo de rutas y navegación.
 Mejores prácticas de accesibilidad y semántica HTML.
 
 # Instalacion y Ejecucion
+
+# Clonar el repositorio
+
+git clone https://github.com/DanGustavo1234/pruebaTecnicaTikee.git
+cd nombre-del-repositorio
+# Instalar Dependencias
+npm install
+
 # configuracion de la base de datos.
 
 Este proyecto utiliza Firebase como backend para la autenticación y almacenamiento de datos.
 Para conectar el proyecto con Firebase, debes configurar tus credenciales en el archivo firebaseConfig.tsx debes crearlo en el siguiente directorio
 
 /src/firebaseConfig.tsx
-
 
 La estructura es la siguiente:
 
@@ -55,5 +62,7 @@ const firebaseConfig = {
 const appReact = initializeApp(firebaseConfig);
 export default appReact;
 
+# Ejecutar la aplicacion
 
+npm run dev
 
