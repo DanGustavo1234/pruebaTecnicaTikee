@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# PRUEBA TECNICA REACT JS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación web de autenticación segura desarrollada con React, que implementa un flujo de inicio de sesión con validación OTP y navegación protegida.
 
-Currently, two official plugins are available:
+Características principales:
+✔ Formulario de Login:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Campos para usuario y contraseña con validaciones estrictas.
+Requisitos de contraseña: mínimo 12 caracteres, incluyendo un carácter especial, un número, una letra minúscula y una mayúscula.
+Autenticación con credenciales predefinidas (prueba_1 / @Password123).
+Carrusel de imágenes en la pantalla de inicio de sesión, cambiando cada 10 segundos.
+✔ Validación OTP:
 
-## Expanding the ESLint configuration
+Simulación del envío de un código OTP de 6 dígitos en la consola.
+Campo de ingreso para el código OTP con validación en tiempo real.
+Redirección a la pantalla de bienvenida tras una validación exitosa.
+✔ Pantalla de Bienvenida:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Muestra el correo del usuario autenticado.
+Menú de navegación con al menos 3 opciones funcionales.
+Botón de cierre de sesión que redirige al login y borra la sesión.
+✔ Diseño Responsivo:
 
-- Configure the top-level `parserOptions` property like this:
+Adaptable a dispositivos móviles y de escritorio.
+Uso de CSS, Material UI o styled-components para estilización.
+✔ Extras Implementados (Opcionales, pero valorados):
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+React Context o Redux para gestionar la autenticación.
+React Router para manejo de rutas y navegación.
+Mejores prácticas de accesibilidad y semántica HTML.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+# Instalacion y Ejecucion
+# configuracion de la base de datos.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Este proyecto utiliza Firebase como backend para la autenticación y almacenamiento de datos.
+Para conectar el proyecto con Firebase, debes configurar tus credenciales en el archivo firebaseConfig.tsx debes crearlo en el siguiente directorio
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+/src/firebaseConfig.tsx
+
+
+La estructura es la siguiente:
+
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+
+// Initialize Firebase
+const appReact = initializeApp(firebaseConfig);
+export default appReact;
+
+
+

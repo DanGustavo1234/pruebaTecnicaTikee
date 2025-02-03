@@ -6,53 +6,85 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Typography from '@mui/material/Typography';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Carousel from 'react-material-ui-carousel';
-import { useState } from 'react';
-import { useAuth } from '../auth/AuthProvider';
+import { useState} from 'react';
 import {getAuth,signInWithEmailAndPassword} from "firebase/auth"
 import appReact from '../firebaseConfig';
-import { User} from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
+import { IconButton, InputAdornment } from '@mui/material';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import "../styles/defaulLayout.css"
 const authFirebase=getAuth(appReact)
 
 const Login = () => {
 
   const [correo,setCorreo]=useState("")
   const [contraseña,setContraseña]=useState("")
-  const [usuario,setUsuario]=useState<User | null>(null);
-  const auth=useAuth()
-  
+  const [usuario,setUsuario]=useState("");
+  const navigate = useNavigate();
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      const usuarioAuth= await signInWithEmailAndPassword(authFirebase, correo, contraseña);
-      setUsuario(usuarioAuth.user)
-      const accessToken = await usuario.getIdToken();
-      auth.setIsAuthenticated(true)
-      window.localStorage.setItem('accessToken',JSON.stringify(accessToken))
-      window.localStorage.setItem('isAuthenticated',"true")
-    } catch {
-      console.log("")
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    
+    if (!correo || !/\S+@\S+\.\S+/.test(correo)) {
+      setEmailError(true);
+      setEmailErrorMessage('Por favor ingresa un correo válido');
+      valid = false;
+    } else {
+      setEmailError(false);
+      setEmailErrorMessage('');
     }
+
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/;
+
+    if (!contraseña || !passwordPattern.test(contraseña)) {
+      setPasswordError(true);
+      setPasswordErrorMessage('La contraseña debe tener al menos 12 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial.'
+);
+      valid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    }
+
+    if (valid){
+      try {
+        const usuarioAuth= await signInWithEmailAndPassword(authFirebase, correo, contraseña);
+        if (usuarioAuth){
+          const accessToken = await usuarioAuth.user.getIdToken();
+          setUsuario(usuarioAuth.user.email.toString())
+          navigate("/Otp", { state: { accessToken, user: usuarioAuth.user.email.toString()} });
+        }
+      } catch {
+        alert("El correo o el password es incorrecto")
+      }
+
+    }
+
+
+
+   
   };
-
-
-
-
-  if(auth.isAuthenticated){
-    return <Navigate to="/dashboard"/>;
-  }
-
 
   const items = [
     { url: "/img1.jpg" },
     { url: "/img2.jpg" },
     { url: "/img3.jpg" }
 ];
-
 
   return (
     <>
@@ -67,14 +99,18 @@ const Login = () => {
                     >
                         {items.map((item, index) => (
                             <div key={index} style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <img className="image" src={item.url} alt={`Slide ${index + 1}`} />
+                                <img className="image" src={item.url} alt={`Slide ${index + 1}`} style={{ 
+                                maxHeight: '100%', 
+                                maxWidth: '100%', 
+                                objectFit: 'contain' 
+                              }}  />
                             </div>
                         ))}
                     </Carousel>
                 </Grid>
                 <Grid item xs={12} sm={6} sx={{display:'flex',justifyContent:'center',alignItems:'center'}}>
                 
-                <form onSubmit={handleSubmit}>
+                
                
                 <Card sx={{ minWidth:'auto',justifyContent:'center',padding:'2em',alignItems:'center',border: '1px solid rgba(94, 88, 87, 0.07)',backgroundColor:'var(--joy-palette-common-white, #FFF)'}}>
                       <CardContent sx={{display:"flex",flexDirection:"column",alignContent:'center',alignItems:'center'}}>
@@ -82,11 +118,12 @@ const Login = () => {
                       <Typography gutterBottom sx={{ color: 'text.primary', fontSize: 20,justifyContent:'center',alignItems:'center' }}>
                           Bienvenido
                         </Typography>
-                          <FormControl sx={{margin:'20px'}}>
+                        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <FormControl>
                                 <FormLabel htmlFor="email" sx={{fontSize:'.7em'}}>Correo</FormLabel>
                                 <TextField
-                                  // error={emailError}
-                                  // helperText={emailErrorMessage}
+                                  error={emailError}
+                                  helperText={emailErrorMessage}
                                   id="email"
                                   type="email"
                                   name="email"
@@ -99,47 +136,66 @@ const Login = () => {
                                   size="small"
                                   value={correo}
                                   onChange={(e)=>setCorreo(e.target.value)}
-                                  // color={emailError ? 'error' : 'primary'}
+                                  color={emailError ? 'error' : 'primary'}
                                 />
                             </FormControl>
                             <FormControl>
                                 <FormLabel htmlFor="password" sx={{fontSize:'.7em'}}>contraseña</FormLabel>
                                 <TextField
-                                  // error={passwordError}
-                                  // helperText={passwordErrorMessage}
-                                  name="password"
-                                  placeholder="••••••"
-                                  type="password"
-                                  id="password"
-                                  autoComplete="current-password"
-                                  autoFocus
-                                  required
-                                  fullWidth
-                                  variant="outlined"
-                                  size="small"
-                                  value={contraseña}
-                                  onChange={(e)=>setContraseña(e.target.value)}
-                                  // color={passwordError ? 'error' : 'primary'}
-                                />
+                                    error={passwordError}
+                                    name="password"
+                                    placeholder="••••••"
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    autoComplete="current-password"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    value={contraseña}
+                                    onChange={(e) => setContraseña(e.target.value)}
+                                    color={passwordError ? "error" : "primary"}
+                                    InputProps={{
+                                      endAdornment: (
+                                        <InputAdornment position="end">
+                                          <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                          >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                          </IconButton>
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                  />
+                                {passwordError && (
+                                      <Typography sx={{ fontSize: '0.6em',color:"red",maxWidth:'300px'}}>{passwordErrorMessage}</Typography>
+                                    )}
                             </FormControl>
-                          </CardContent>
-                          <CardActions sx={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:"column"}}>
+
+                            <CardActions sx={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:"column"}}>
                             <Button size="small" type='submit' sx={{backgroundColor:'#0B6BCB',padding:'8px',width:'200px'}} variant="contained">Iniciar sesión</Button>
-                            <Typography sx={{ textAlign: 'center',margin:'15px',fontSize:'.8em' }}>
-                            ¿Aún no tienes una cuenta?{' '}
-                              <Link
-                                to="/singup"
-                              >
-                                Regístrate
-                              </Link>
-                        </Typography>
+                              <Typography sx={{ textAlign: 'center',margin:'15px',fontSize:'.8em' }}>
+                                ¿Aún no tienes una cuenta?{' '}
+                                  <Link
+                                    to="/singup"
+                                  >
+                                    Regístrate
+                                  </Link>
+                              </Typography>
+
                           </CardActions>
+
+                        </form>
+                            
+                          </CardContent>
+                          
                       </Card>
-                      </form>
-          
                 </Grid>
             </Grid>
-      
     </>
    
   )

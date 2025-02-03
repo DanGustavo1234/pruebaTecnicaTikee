@@ -1,13 +1,71 @@
-import React from 'react';
-import { Card, CardContent, Typography, Button, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Button, Grid, Box } from '@mui/material';
+import OtpInput from 'react-otp-input';
+import { useState,useEffect} from 'react';
+import { useAuth } from '../auth/AuthProvider';
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+
+
+
 
 const Otp = () => {
+  const [otp, setOtp] = useState("");
+  const [otpUser, setOtpUser] = useState("");
+  const [otpGenerado,setOtpGenerado]=useState(false)
+  const [error, setError] = useState(false);
+  const [helperText, setHelperText] =useState('Ingresa tu OTP');
+  const auth=useAuth()
+  const navigate=useNavigate()
+  const location = useLocation();
+  const { accessToken, user } = location.state;
+
+  
+
+  useEffect(() => {
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000);
+    setOtp(generatedOtp.toString());
+    setOtpGenerado(true);  
+    const timer = setTimeout(() => {
+      console.log("El OTP ha caducado");
+      setOtp(""); 
+      setOtpGenerado(false);
+    }, 1 * 60 * 1000); // 1 minuto
+  
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (otp) {
+      console.log(`Tu código de verificación es: ${otp} No lo compartas con nadie. 🛡️`);
+    }
+  }, [otp]);
+
+    const verificarOtp=(e)=>{
+      e.preventDefault();
+      if (otp === otpUser){
+        setOtp("")
+        setOtpUser("")
+        setError(false);
+        auth.setIsAuthenticated(true)
+        window.localStorage.setItem('accessToken',JSON.stringify(accessToken))
+        window.localStorage.setItem('estado',"true")
+        window.localStorage.setItem('user',user)
+        navigate("/dashboard")
+      }else{
+        setOtpUser("")
+        setHelperText('Error OTP incorrecto');
+        setError(true);
+      }
+    }
+
+
   return (
     <div style={{ 
       display: 'flex', 
       justifyContent: 'center', 
       alignItems: 'center', 
-      height: '100vh', // Esto asegura que el contenedor ocupe toda la altura de la página
+      height: '100vh', 
       backgroundColor: '#e0f3ff' 
     }}>
       <Card sx={{ 
@@ -16,26 +74,50 @@ const Otp = () => {
         border: '1px solid rgba(94, 88, 87, 0.07)', 
         backgroundColor: 'var(--joy-palette-common-white, #FFF)', 
         display: 'flex',
-        flexDirection: 'column', // Asegura que el contenido esté en una columna
+        flexDirection: 'column', 
         alignItems: 'center',
         justifyContent: 'center'
       }}>
         <CardContent>
-          <Typography variant="h6" align="center" gutterBottom>
-            Ingresa el código OTP
-          </Typography>
-          <Grid container spacing={2} justifyContent="center">
-            
+          
+          <Box sx={{alignItems:'center',textAlign:'center'}}>
+              <img src="/candado-abierto.png" width="50px"/>
+              <Typography  align="center" gutterBottom fontSize='0.8em'>
+                Autenticación OTP
+              </Typography>
+              <Typography  align="center" gutterBottom fontSize='0.6em'>
+              Se imprimió el código OTP de 6 dígitos en la consola.
+              </Typography>
+          </Box>
+          <Grid container spacing={2} justifyContent="center" sx={{marginTop:'10px',marginButton:'10px'}}>
+          <OtpInput
+                value={otpUser}
+                onChange={setOtpUser}
+                numInputs={6}
+                renderSeparator={"--"}
+                renderInput={(props) => <input {...props} style={{ 
+                  width: '35px', 
+                  height: '40px', 
+                  fontSize: '1.2em', 
+                  textAlign: 'center', 
+                  border: '1px solid #ccc', 
+                  margin: '0 2px' 
+                }}  />}
+              />
           </Grid>
+          <div style={{ color: 'red', fontSize: '0.8em', textAlign: 'center' }}>
+          {error ? helperText : null}
+          </div>
           <Button
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => { /* Lógica de envío de OTP */ }}
+            onClick={verificarOtp}
+            sx={{marginTop:'10px'}}
           >
             Verificar
           </Button>
-        </CardContent>
+               </CardContent>
       </Card>
     </div>
   );
@@ -43,90 +125,3 @@ const Otp = () => {
 
 export default Otp;
 
-
-
-
-
-
-// import React, { useState } from 'react';
-// import { Card, CardContent, TextField, Button, Grid, Typography } from '@mui/material';
-
-// const Otp = () => {
-//   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']); // Estado para almacenar cada dígito del OTP
-//   const [error, setError] = useState<boolean>(false); // Estado para manejar los errores
-
-//   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-//     const value = event.target.value;
-//     // Actualizamos el valor del dígito correspondiente en el array
-//     if (/^[0-9]*$/.test(value) && value.length <= 1) {
-//       const newOtp = [...otp];
-//       newOtp[index] = value;
-//       setOtp(newOtp);
-//       setError(false);
-//     }
-//   };
-
-//   const handleSubmit = () => {
-//     const otpString = otp.join('');
-//     if (otpString.length === 6) {
-//       console.log('OTP enviado:', otpString);
-//       // Aquí iría la lógica para verificar el OTP
-//     } else {
-//       setError(true);
-//     }
-//   };
-
-//   const handleFocus = (e: React.FocusEvent<HTMLInputElement>, index: number) => {
-//     if (e.target.value === '') {
-//       return;
-//     }
-//     // Move focus to the next input field
-//     if (index < otp.length - 1) {
-//       document.getElementById(`otp-${index + 1}`)?.focus();
-//     }
-//   };
-
-//   return (
-//     <Card sx={{ minWidth:'auto',justifyContent:'center',padding:'2em',alignItems:'center',border: '1px solid rgba(94, 88, 87, 0.07)',backgroundColor:'var(--joy-palette-common-white, #FFF)'}}>
-//       <CardContent>
-//         <Typography variant="h6" align="center" gutterBottom>
-//           Ingresa el código OTP
-//         </Typography>
-//         <Grid container spacing={2} justifyContent="center">
-//           <Grid item xs={12}>
-//             <Grid container spacing={1} justifyContent="center">
-//               {otp.map((digit, index) => (
-//                 <Grid item key={index}>
-//                   <TextField
-//                     id={`otp-${index}`}
-//                     label=""
-//                     variant="outlined"
-//                     value={digit}
-//                     onChange={(e) => handleChange(e, index)}
-//                     onFocus={(e) => handleFocus(e, index)}
-//                     inputProps={{ maxLength: 1 }}
-//                     error={error && otp.join('').length !== 6}
-//                     helperText={error && otp.join('').length !== 6 ? "Por favor ingresa un código de 6 dígitos" : ""}
-//                     style={{ width: 50 }}
-//                   />
-//                 </Grid>
-//               ))}
-//             </Grid>
-//           </Grid>
-//           <Grid item xs={12}>
-//             <Button
-//               variant="contained"
-//               color="primary"
-//               fullWidth
-//               onClick={handleSubmit}
-//             >
-//               Verificar
-//             </Button>
-//           </Grid>
-//         </Grid>
-//       </CardContent>
-//     </Card>
-//   );
-// };
-
-// export default Otp;

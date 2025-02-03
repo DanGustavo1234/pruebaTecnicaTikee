@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#Configuracion de firebase
+
+firebaseConfig.tsx
+
+

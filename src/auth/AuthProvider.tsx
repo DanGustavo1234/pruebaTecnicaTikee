@@ -2,6 +2,7 @@ import { createContext,useContext,useEffect,useState} from "react";
 
 
 
+
 interface AuthProviderProps {
     children: React.ReactNode;
 }
@@ -11,24 +12,16 @@ interface AuthContextType {
     setIsAuthenticated: (value: boolean) => void;
 }
 
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-
 const AuthProvider = ({children}:AuthProviderProps) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    
-    useEffect(()=>{
-        const accessToken=window.localStorage.getItem("accessToken")
-        const authenticated=window.localStorage.getItem("isAuthenticated")
-        if (accessToken && authenticated === "true") {
-            setIsAuthenticated(true);  
-        } else {
-            setIsAuthenticated(false); 
-        }
-    },[])
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+        return localStorage.getItem("estado") === "true";
+    });
 
-
+    useEffect(() => {
+        localStorage.setItem("estado", JSON.stringify(isAuthenticated));
+      }, [isAuthenticated]);
 
 
   return <AuthContext.Provider value={{isAuthenticated,setIsAuthenticated}}>{children}</AuthContext.Provider>

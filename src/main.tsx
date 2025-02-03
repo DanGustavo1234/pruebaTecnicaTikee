@@ -9,6 +9,10 @@ import Dashboard from './routes/Dashboard'
 import Otp from './routes/Otp'
 import ProtectedRoute from './routes/ProtectedRoute'
 import AuthProvider from './auth/AuthProvider'
+import Home from './routes/Home'
+import Gmail from './routes/Gmail'
+import EnviarGmail from './routes/EnviarGmail'
+
 
 
 const router=createBrowserRouter([
@@ -31,8 +35,26 @@ const router=createBrowserRouter([
     children:[
       {
        path:'/dashboard',
-       element:<Dashboard/> 
-      }]
+       element:<Dashboard/> ,
+       children:[
+        {
+          path: 'home',
+          element: <Home />,
+        },
+        {
+          path: 'gmail',
+          element: <Gmail />,
+        },
+        {
+          path: 'enviargmail',
+          element: <EnviarGmail />,
+        },
+
+       ]
+      },
+      
+    
+    ]
   }
 
  
