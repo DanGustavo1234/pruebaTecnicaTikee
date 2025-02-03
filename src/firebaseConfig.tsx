@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_MESSAGING_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyCPFoC37oRqDEg0XtCVzSr7qu88FeT6INo",
+  authDomain: "reactauth-3580f.firebaseapp.com",
+  projectId: "reactauth-3580f",
+  storageBucket: "reactauth-3580f.firebasestorage.app",
+  messagingSenderId: "554406935796",
+  appId: "1:554406935796:web:c3c32dab2881b06701b2a1"
 };
 
-// Inicializa Firebase
+// Initialize Firebase
 const appReact = initializeApp(firebaseConfig);
 export default appReact;

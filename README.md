@@ -44,6 +44,7 @@ npm install
 Este proyecto utiliza Firebase como backend para la autenticación y almacenamiento de datos.
 Para conectar el proyecto con Firebase, debes configurar tus credenciales en el archivo firebaseConfig.tsx 
 
+en el directorio /src/firebaseConfig.tsx
 
 # Ejecutar la aplicacion
 
