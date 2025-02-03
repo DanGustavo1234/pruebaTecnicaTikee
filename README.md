@@ -46,22 +46,28 @@ Para conectar el proyecto con Firebase, debes configurar tus credenciales en el 
 
 /src/firebaseConfig.tsx
 
-La estructura es la siguiente:
+# La estructura es la siguiente:
 
+// Importa la función para inicializar la app de Firebase
 import { initializeApp } from "firebase/app";
 
+// Configuración de Firebase con tus credenciales
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "TU_API_KEY",                          // Clave API de Firebase
+  authDomain: "TU_AUTH_DOMAIN",                  // Dominio de autenticación
+  projectId: "TU_PROJECT_ID",                    // ID del proyecto
+  storageBucket: "TU_STORAGE_BUCKET",            // Almacenamiento en Firebase
+  messagingSenderId: "TU_MESSAGING_SENDER_ID",   // ID del remitente de mensajes
+  appId: "TU_APP_ID"                             // ID de la aplicación
 };
 
-// Initialize Firebase
+// Inicializa Firebase con la configuración proporcionada
 const appReact = initializeApp(firebaseConfig);
+
+// Exporta la app para usarla en otras partes del proyecto
 export default appReact;
+
+
 
 # Ejecutar la aplicacion
 
