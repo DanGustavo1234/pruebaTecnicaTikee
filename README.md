@@ -42,30 +42,7 @@ npm install
 # configuracion de la base de datos.
 
 Este proyecto utiliza Firebase como backend para la autenticación y almacenamiento de datos.
-Para conectar el proyecto con Firebase, debes configurar tus credenciales en el archivo firebaseConfig.tsx debes crearlo en el siguiente directorio
-
-/src/firebaseConfig.tsx
-
-# La estructura es la siguiente:
-
--// Importa la función para inicializar la app de Firebase
--import { initializeApp } from "firebase/app";
-
-// Configuración de Firebase con tus credenciales
--const firebaseConfig = {
-  -apiKey: "TU_API_KEY",                          // Clave API de Firebase
-  -authDomain: "TU_AUTH_DOMAIN",                  // Dominio de autenticación
-  -projectId: "TU_PROJECT_ID",                    // ID del proyecto
-  -storageBucket: "TU_STORAGE_BUCKET",            // Almacenamiento en Firebase
-  -messagingSenderId: "TU_MESSAGING_SENDER_ID",   // ID del remitente de mensajes
-  -appId: "TU_APP_ID"                             // ID de la aplicación
-};
-
-// Inicializa Firebase
--const appReact = initializeApp(firebaseConfig);
-
-// Exporta la app para usarla en otras partes del proyecto
--export default appReact;
+Para conectar el proyecto con Firebase, debes configurar tus credenciales en el archivo firebaseConfig.tsx 
 
 
 # Ejecutar la aplicacion
