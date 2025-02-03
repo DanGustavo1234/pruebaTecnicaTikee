@@ -33,8 +33,9 @@ Mejores prácticas de accesibilidad y semántica HTML.
 
 # Clonar el repositorio
 
-git clone https://github.com/DanGustavo1234/pruebaTecnicaTikee.git
-cd nombre-del-repositorio
+-git clone https://github.com/DanGustavo1234/pruebaTecnicaTikee.git
+
+-cd nombre-del-repositorio
 # Instalar Dependencias
 npm install
 
