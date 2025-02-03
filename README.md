@@ -68,8 +68,6 @@ Para conectar el proyecto con Firebase, debes configurar tus credenciales en el 
 -export default appReact;
 
 
-
-
 # Ejecutar la aplicacion
 
 npm run dev
